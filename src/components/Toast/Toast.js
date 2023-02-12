@@ -1,47 +1,45 @@
-import React from 'react';
+import React from "react"
+import { ToastContext } from "../ToastProvider/ToastProvider"
 import {
-  AlertOctagon,
-  AlertTriangle,
-  CheckCircle,
-  Info,
-  X,
-} from 'react-feather';
+	AlertOctagon,
+	AlertTriangle,
+	CheckCircle,
+	Info,
+	X,
+} from "react-feather"
 
-import VisuallyHidden from '../VisuallyHidden';
+import VisuallyHidden from "../VisuallyHidden"
 
-import styles from './Toast.module.css';
+import styles from "./Toast.module.css"
 
 const ICONS_BY_VARIANT = {
-  notice: Info,
-  warning: AlertTriangle,
-  success: CheckCircle,
-  error: AlertOctagon,
-};
-
-function Toast({ message, variant, isShown, handleDismiss, id }) {
-
- const Icon = ICONS_BY_VARIANT[variant]
-  return (
-    <>
-      {isShown && (
-        <div className={`${styles.toast} ${styles[variant]}`} >
-          <div className={styles.iconContainer}>
-            <Icon size={24} />
-          </div>
-          <p className={styles.content}>
-            {message}
-          </p>
-          <button 
-            className={styles.closeButton}
-            onClick={()=> handleDismiss(id)}
-            >
-            <X size={24} />
-            <VisuallyHidden>Dismiss message</VisuallyHidden>
-          </button>
-        </div>
-        )
-      }
-    </>)
+	notice: Info,
+	warning: AlertTriangle,
+	success: CheckCircle,
+	error: AlertOctagon,
 }
 
-export default Toast;
+function Toast({message, variant, id}) {
+	const { handleDismiss } = React.useContext(ToastContext)
+
+	const Icon = ICONS_BY_VARIANT[variant]
+	return (
+		<>
+			<div className={`${styles.toast} ${styles[variant]}`}>
+				<div className={styles.iconContainer}>
+					<Icon size={24} />
+				</div>
+				<p className={styles.content}>{message}</p>
+				<button
+					className={styles.closeButton}
+					onClick={() => handleDismiss(id)}
+				>
+					<X size={24} />
+					<VisuallyHidden>Dismiss message</VisuallyHidden>
+				</button>
+			</div>
+		</>
+	)
+}
+
+export default Toast
