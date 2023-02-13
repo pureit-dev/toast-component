@@ -11,7 +11,31 @@ function ToastPlayground() {
 	const [message, setMessage] = React.useState("")
 	const [variant, setVariant] = React.useState("notice")
 
-	const { createToast } = React.useContext(ToastContext)
+	const { createToast, dismissAll } = React.useContext(ToastContext)
+
+	function handleCreateToast(event) {
+		event.preventDefault()
+		createToast(message, variant)
+		setMessage("")
+		setVariant("notice")
+	}
+
+	function useEscapeKey(callback) {
+		React.useEffect(() => {
+			function handleKeyDown(event) {
+				if (event.code === "Escape") {
+					callback()
+				}
+			}
+			window.addEventListener("keydown", handleKeyDown)
+
+			return () => {
+				window.removeEventListener("keydown", handleKeyDown)
+			}
+		}, [callback])
+	}
+
+	useEscapeKey(dismissAll)
 
 	return (
 		<div className={styles.wrapper}>
@@ -20,7 +44,10 @@ function ToastPlayground() {
 				<h1>Toast Playground</h1>
 			</header>
 			<ToastShelf />
-			<form className={styles.controlsWrapper} onSubmit={createToast}>
+			<form
+				className={styles.controlsWrapper}
+				onSubmit={handleCreateToast}
+			>
 				<div className={styles.row}>
 					<label
 						htmlFor="message"
